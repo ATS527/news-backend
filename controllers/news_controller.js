@@ -5,6 +5,7 @@ const Category = require("../models/categories");
 const fs = require("fs");
 const { Op } = require("sequelize");
 const Bookmark = require('../models/bookmark');
+const NewsViewed = require('../models/news_viewed');
 
 const server_url = process.env.SERVER_URL || "http://localhost:3000/uploads/";
 
@@ -352,9 +353,17 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
             }
         });
 
-        //get news having categories listed in categories array.if the news is empty then get all news
+        const newsViewed = await NewsViewed.findAll({
+            where: {
+                email: req.query.email,
+            }
+        });
+
         const categorizedNews = categories.length > 0 ? await News.findAll({
             where: {
+                id: {
+                    [Op.notIn]: newsViewed.map(news => news.news_id),
+                },
                 category: {
                     [Op.or]: categories.map(category => category.category),
                 }
@@ -380,7 +389,6 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
             return;
         }
 
-        //randomise news with advertisements where advertisements are inserted after every 5 news
         const newsWithAdvertisement = [];
         let advertisementIndex = 0;
         for (let i = 0; i < categorizedNews.length; i++) {
@@ -403,6 +411,40 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
             success: false,
             message: "Something went wrong",
             error: err,
+        });
+    }
+}
+
+exports.viewedNews = async (req,res) => {
+    try {
+        const news_id = req.query.news_id;
+        const email = req.query.email;
+
+        const news = await News.findByPk(news_id);
+
+        if (!news) {
+            res.status(400).json({
+                success: false,
+                message: "News not found",
+            });
+            return;
+        }
+
+        await NewsViewed.create({
+            email: email,
+            news_id: news_id,
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "News viewed successfully",
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
         });
     }
 }
