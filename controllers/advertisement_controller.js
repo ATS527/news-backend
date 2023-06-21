@@ -11,9 +11,7 @@ exports.createAdvertisement = async (req, res) => {
         if (req.files) {
             const { image } = req.files;
             var processedImage = "";
-            console.log("worked");
             if (image) {
-                console.log("worked here too");
                 const filename = nanoid() + ".jpg";
                 await image.mv(`./public/uploads/${filename}`, async (err) => {
                     if (err) {
@@ -51,6 +49,11 @@ exports.createAdvertisement = async (req, res) => {
                     data: advertisement
                 });
             }
+        } else {
+            res.status(500).json({
+                success: false,
+                message: "No image found"
+            })
         }
 
     } catch (err) {
