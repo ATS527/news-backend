@@ -335,6 +335,56 @@ exports.deleteNews = async (req, res, next) => {
     }
 }
 
+exports.getNewsForGuests = async (req,res) => {
+    try {
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
+        const offset = (page - 1) * limit;
+
+        const advertisements = await Advertisement.findAll({
+            where: {
+                type: "advertisement",
+            }
+        });
+
+        const news = await News.findAll({
+            order: [
+                ['createdAt', 'DESC']
+            ],
+            offset: offset,
+            limit: limit,
+            where: {
+                type: "news"
+            }
+        });
+
+        //mix advertisements with news like after 5 news an ad would come
+        const newsWithAdvertisement = [];
+        let advertisementIndex = 0;
+        for (let i = 0; i < news.length; i++) {
+            if (i % 5 === 0 && i !== 0) {
+                newsWithAdvertisement.push(advertisements[advertisementIndex]);
+                advertisementIndex++;
+            }
+            newsWithAdvertisement.push(news[i]);
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "News found",
+            data: newsWithAdvertisement,
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong", 
+            error: err
+        })
+    }
+}
+
 exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
     try {
         const page = parseInt(req.query.page);

@@ -1,6 +1,6 @@
 const newsRouter = require("express").Router();
 
-const { createNews, createNewsPicture,getNewsBySearch,getNewsWithAdvertisementAndCategorization, getAllNews, getNewsById, updateNews, deleteNews, updateNewsPicture , viewedNews} = require("../controllers/news_controller");
+const { createNews, createNewsPicture,getNewsForGuests,getNewsBySearch,getNewsWithAdvertisementAndCategorization, getAllNews, getNewsById, updateNews, deleteNews, updateNewsPicture , viewedNews} = require("../controllers/news_controller");
 
 const { isAuthenticatedUser } = require("../middleware/auth");
 
@@ -23,5 +23,7 @@ newsRouter.get("/getNewsWithAdvertisementAndCategorization", getNewsWithAdvertis
 newsRouter.get("/getNewsBySearch",getNewsBySearch);
 
 newsRouter.get("/viewedNews", viewedNews);
+
+newsRouter.get("/getNewsForGuests", getNewsForGuests);
 
 module.exports = newsRouter;
