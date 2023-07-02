@@ -389,17 +389,12 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
     try {
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
+        const categoryQuery = req.query.category;
         const offset = (page - 1) * limit;
 
         const advertisements = await Advertisement.findAll({
             where: {
                 type: "advertisement",
-            }
-        });
-
-        const categories = await Category.findAll({
-            where: {
-                email: req.query.email,
             }
         });
 
@@ -409,34 +404,66 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
             }
         });
 
-        const categorizedNews = categories.length > 0 ? await News.findAll({
+        const categories = await Category.findAll({
             where: {
-                id: {
-                    [Op.notIn]: newsViewed.map(news => news.news_id),
-                },
-                category: {
-                    [Op.or]: categories.map(category => category.category),
-                }
-            },
-            order: [
-                ['createdAt', 'DESC']
-            ],
-            offset: offset,
-            limit: limit,
-        }) : await News.findAll({
-            order: [
-                ['createdAt', 'DESC']
-            ],
-            offset: offset,
-            limit: limit,
+                email: req.query.email,
+            }
         });
 
-        if (!categorizedNews) {
-            res.status(400).json({
-                success: false,
-                message: "News not found",
+        var categorizedNews = [];
+
+        if (categoryQuery) {
+            categorizedNews = await News.findAll({
+                where: {
+                    id: {
+                        [Op.notIn]: newsViewed.map(news => news.news_id),
+                    },
+                    category: categoryQuery,
+                },
+                order: [
+                    ['createdAt', 'DESC']
+                ],
+                offset: offset,
+                limit: limit,
             });
-            return;
+
+            if (!categorizedNews) {
+                res.status(400).json({
+                    success: false,
+                    message: "News not found",
+                });
+                return;
+            }
+        } else {
+            categorizedNews = categories.length > 0 ? await News.findAll({
+                where: {
+                    id: {
+                        [Op.notIn]: newsViewed.map(news => news.news_id),
+                    },
+                    category: {
+                        [Op.or]: categories.map(category => category.category),
+                    }
+                },
+                order: [
+                    ['createdAt', 'DESC']
+                ],
+                offset: offset,
+                limit: limit,
+            }) : await News.findAll({
+                order: [
+                    ['createdAt', 'DESC']
+                ],
+                offset: offset,
+                limit: limit,
+            });
+
+            if (!categorizedNews) {
+                res.status(400).json({
+                    success: false,
+                    message: "News not found",
+                });
+                return;
+            }
         }
 
         const newsWithAdvertisement = [];
