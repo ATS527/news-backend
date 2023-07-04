@@ -335,7 +335,7 @@ exports.deleteNews = async (req, res, next) => {
     }
 }
 
-exports.getNewsForGuests = async (req,res) => {
+exports.getNewsForGuests = async (req, res) => {
     try {
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
@@ -379,7 +379,7 @@ exports.getNewsForGuests = async (req,res) => {
         console.log(err);
         res.status(500).json({
             success: false,
-            message: "Something went wrong", 
+            message: "Something went wrong",
             error: err
         })
     }
@@ -412,7 +412,7 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
 
         var categorizedNews = [];
 
-        if (categoryQuery) {
+        if (categoryQuery !== undefined) {
             categorizedNews = await News.findAll({
                 where: {
                     id: {
@@ -435,6 +435,7 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
                 return;
             }
         } else {
+            console.log("else part executing");
             categorizedNews = categories.length > 0 ? await News.findAll({
                 where: {
                     id: {
@@ -453,6 +454,12 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
                 order: [
                     ['createdAt', 'DESC']
                 ],
+                where: {
+                    id: {
+                        [Op.notIn]: newsViewed.map(news => news.news_id),
+                    },
+                    type: "news",
+                },
                 offset: offset,
                 limit: limit,
             });
@@ -465,6 +472,8 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
                 return;
             }
         }
+
+        console.log(categorizedNews);
 
         const newsWithAdvertisement = [];
         let advertisementIndex = 0;
@@ -492,7 +501,7 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
     }
 }
 
-exports.viewedNews = async (req,res) => {
+exports.viewedNews = async (req, res) => {
     try {
         const news_id = req.query.news_id;
         const email = req.query.email;
