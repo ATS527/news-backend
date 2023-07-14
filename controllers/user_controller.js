@@ -1,7 +1,72 @@
 const User = require("../models/user");
+const Activity = require("../models/activity");
 
 const { Op } = require("sequelize");
 
+exports.loginActivity = async (req,res) => {
+    try {
+        const activity = await Activity.create({
+            user_id: req.body.user_id,
+            //current datetime in login_time
+            login_time: Date.now(),
+            logout_time: null,
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Activity created successfully",
+            data: activity,
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            error: err,
+        });
+    }
+}
+
+exports.logoutActivity = async (req,res) => {
+    try {
+        //give the latest activity data of a user by id
+        const activity = await Activity.findOne({
+            where: {
+                user_id: req.body.user_id,
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ],
+        });
+
+        if (!activity) {
+            res.status(400).json({
+                success: false,
+                message: "Activity not found",
+            });
+            return;
+        }
+
+        const result = await activity.update({
+            logout_time: Date.now(),
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Activity updated successfully",
+            data: result,
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            error: err,
+        });
+    }
+}
 
 exports.createUser = async (req, res, next) => {
     try {

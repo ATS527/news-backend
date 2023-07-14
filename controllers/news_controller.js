@@ -6,6 +6,7 @@ const fs = require("fs");
 const { Op } = require("sequelize");
 const Bookmark = require('../models/bookmark');
 const NewsViewed = require('../models/news_viewed');
+const firebase = require("../config/firebase_config");
 
 const server_url = process.env.SERVER_URL || "http://localhost:3000/uploads/";
 
@@ -33,6 +34,34 @@ exports.createNews = async (req, res, next) => {
             link: req.body.link,
             type: "news"
         });
+
+        if (result) {
+            const content = req.body.content;
+            const data = req.body.data;
+
+            const message = {
+                data: data,
+                topic: req.body.category,
+                notification: {
+                    title: "Cyberbul News",
+                    body: content,
+                    sound: 'default'
+                }
+            }
+
+            firebase.messaging().send(message)
+                .then((response) => {
+                    console.log('Successfully sent message:', response);
+                    // res.status(200).json({ success: true, message: "Push Notification Sent Successfully" });
+                })
+                .catch((error) => {
+                    console.log('Error sending message:', error);
+                    // res.status(500).json({
+                    //     success: false,
+                    //     message: "Something went wrong",
+                    // });
+                });
+        }
 
         res.status(201).json({
             success: true,
