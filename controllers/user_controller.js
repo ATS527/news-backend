@@ -78,9 +78,8 @@ exports.getActivityLogs = async (req,res) => {
     try {
         const activity = await Activity.findAll({
             where: {
-                user_id: req.params.user_id,
+                user_id: req.body.user_id,
             },
-            //pagination
             limit: limit,
             offset: offset,
             order: [
