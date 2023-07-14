@@ -10,6 +10,9 @@ const activity = sequelize.define("Activity", {
     },
     logout_time: {
         type: Sequelize.DATE,
+    },
+    duration: {
+        type: Sequelize.BIGINT(10),
     }
 },
 {

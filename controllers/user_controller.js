@@ -7,9 +7,7 @@ exports.loginActivity = async (req,res) => {
     try {
         const activity = await Activity.create({
             user_id: req.body.user_id,
-            //current datetime in login_time
-            login_time: Date.now(),
-            logout_time: null,
+            login_time: Date.now()
         });
 
         res.status(201).json({
@@ -48,8 +46,12 @@ exports.logoutActivity = async (req,res) => {
             return;
         }
 
+        // duration for the login time in minutes
+        var duration_in_mins = (Date.now() - activity.login_time) / 60000;
+
         const result = await activity.update({
             logout_time: Date.now(),
+            duration: duration_in_mins
         });
 
         res.status(200).json({
@@ -58,6 +60,47 @@ exports.logoutActivity = async (req,res) => {
             data: result,
         });
 
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            error: err,
+        });
+    }
+}
+
+exports.getActivityLogs = async (req,res) => {
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+    const offset = (page - 1) * limit;
+
+    try {
+        const activity = await Activity.findAll({
+            where: {
+                user_id: req.params.user_id,
+            },
+            //pagination
+            limit: limit,
+            offset: offset,
+            order: [
+                ['createdAt', 'DESC']
+            ],
+        });
+
+        if (!activity) {
+            res.status(400).json({
+                success: false,
+                message: "Activity not found",
+            });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Activity found",
+            data: activity,
+        });
     } catch (err) {
         console.log(err);
         res.status(500).json({
