@@ -4,7 +4,7 @@ const { createCategory, getCategoryByEmailApi, deleteCategory } = require('../co
 
 categoryRouter.post('/createCategory', createCategory);
 
-categoryRouter.get('/getCategoryByEmailApi/:email', getCategoryByEmailApi);
+categoryRouter.get('/getCategoryByEmailApi', getCategoryByEmailApi);
 
 categoryRouter.delete('/deleteCategory/:email', deleteCategory);
 

@@ -56,7 +56,7 @@ exports.getCategoryByEmailApi = async (req, res) => {
     try {
         const categories = await Categories.findAll({
             where: {
-                email: req.params.email,
+                email: req.body.email,
             },
         });
 
