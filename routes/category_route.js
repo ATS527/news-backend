@@ -1,5 +1,3 @@
-
-
 const categoryRouter = require('express').Router();
 
 const { createCategory, getCategoryByEmail, deleteCategory } = require('../controllers/categories_controller');

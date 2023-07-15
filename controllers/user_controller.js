@@ -3,7 +3,7 @@ const Activity = require("../models/activity");
 
 const { Op } = require("sequelize");
 
-exports.loginActivity = async (req,res) => {
+exports.loginActivity = async (req, res) => {
     try {
         const activity = await Activity.create({
             user_id: req.body.user_id,
@@ -26,7 +26,7 @@ exports.loginActivity = async (req,res) => {
     }
 }
 
-exports.logoutActivity = async (req,res) => {
+exports.logoutActivity = async (req, res) => {
     try {
         //give the latest activity data of a user by id
         const activity = await Activity.findOne({
@@ -70,16 +70,13 @@ exports.logoutActivity = async (req,res) => {
     }
 }
 
-exports.getActivityLogs = async (req,res) => {
+exports.getActivityLogs = async (req, res) => {
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const offset = (page - 1) * limit;
 
     try {
         const activity = await Activity.findAll({
-            where: {
-                user_id: req.body.user_id,
-            },
             limit: limit,
             offset: offset,
             order: [
@@ -87,18 +84,26 @@ exports.getActivityLogs = async (req,res) => {
             ],
         });
 
-        if (!activity) {
-            res.status(400).json({
-                success: false,
-                message: "Activity not found",
-            });
-            return;
+        const data = [];
+
+        if (activity.length !== 0) {
+            for (var i = 0; i < activity.length; i++) {
+                const user = await User.findByPk(activity[i].user_id);
+                var map = {
+                    username: user.username,
+                    email: user.email,
+                    login_time: activity[i].login_time,
+                    logout_time: activity[i].logout_time,
+                    duration: activity[i].duration
+                }
+                data.push(map);
+            }
         }
 
         res.status(200).json({
             success: true,
             message: "Activity found",
-            data: activity,
+            data: data,
         });
     } catch (err) {
         console.log(err);
@@ -224,7 +229,7 @@ exports.getUsersBySearch = async (req, res) => {
             data: users,
         });
     } catch (err) {
-		console.log(err);
+        console.log(err);
         res.status(500).json({
             success: false,
             message: "Something went wrong",
