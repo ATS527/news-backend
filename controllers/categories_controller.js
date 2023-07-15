@@ -52,7 +52,7 @@ exports.createCategory = async (req, res) => {
     }
 }
 
-exports.getCategoryByEmail = async (req, res) => {
+exports.getCategoryByEmailApi = async (req, res) => {
     try {
         const categories = await Categories.findAll({
             where: {

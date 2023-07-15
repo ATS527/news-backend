@@ -1,10 +1,10 @@
 const categoryRouter = require('express').Router();
 
-const { createCategory, getCategoryByEmail, deleteCategory } = require('../controllers/categories_controller');
+const { createCategory, getCategoryByEmailApi, deleteCategory } = require('../controllers/categories_controller');
 
 categoryRouter.post('/createCategory', createCategory);
 
-categoryRouter.get('/getCategoryByEmail/:email', getCategoryByEmail);
+categoryRouter.get('/getCategoryByEmailApi/:email', getCategoryByEmailApi);
 
 categoryRouter.delete('/deleteCategory/:email', deleteCategory);
 
