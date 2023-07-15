@@ -56,7 +56,7 @@ exports.getCategoryByEmailApi = async (req, res) => {
     try {
         const categories = await Categories.findAll({
             where: {
-                email: req.body.email,
+                email: req.query.email,
             },
         });
 
@@ -77,7 +77,7 @@ exports.getCategoryByEmailApi = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Categories found",
-            email: req.params.email,
+            email: req.query.email,
             data: result,
         });
 
@@ -106,7 +106,7 @@ exports.deleteCategory = async (req, res) => {
         for (let i = 0; i < categories.length; i++) {
             const result = await Categories.destroy({
                 where: {
-                    email: req.params.email,
+                    email: req.query.email,
                     category: categories[i],
                 },
             });
@@ -115,7 +115,7 @@ exports.deleteCategory = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Categories deleted",
-            email: req.body.email,
+            email: req.query.email,
         });
 
     } catch (err) {

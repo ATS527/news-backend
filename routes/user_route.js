@@ -4,13 +4,13 @@ const { createUser,getUsersBySearch,getActivityLogs,loginActivity,logoutActivity
 
 userRouter.post('/createUser', createUser);
 
-userRouter.get('/getUserByEmail/:email', getUserByEmail);
+userRouter.get('/getUserByEmail', getUserByEmail);
 
 userRouter.get('/getUsersBySearch',getUsersBySearch);
 
-userRouter.put('/updateUser/:email', updateUser);
+userRouter.put('/updateUser', updateUser);
 
-userRouter.delete('/deleteUser/:email', deleteUser);
+userRouter.delete('/deleteUser', deleteUser);
 
 userRouter.get("/getAllUserData", getAllUserData);
 

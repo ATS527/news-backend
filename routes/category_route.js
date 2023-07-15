@@ -6,6 +6,6 @@ categoryRouter.post('/createCategory', createCategory);
 
 categoryRouter.get('/getCategoryByEmailApi', getCategoryByEmailApi);
 
-categoryRouter.delete('/deleteCategory/:email', deleteCategory);
+categoryRouter.delete('/deleteCategory', deleteCategory);
 
 module.exports = categoryRouter;

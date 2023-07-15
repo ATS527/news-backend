@@ -166,7 +166,7 @@ exports.deleteAdmin = async (req, res, next) => {
     try {
         const admin = await Admin.findOne({
             where: {
-                email: req.params.email,
+                email: req.query.email,
             },
         });
 

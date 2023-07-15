@@ -14,6 +14,6 @@ adminRouter.put("/changePassword", isAuthenticatedUser, changePassword);
 
 adminRouter.get("/me", isAuthenticatedUser, getCurrentlyLoggedinAdmin);
 
-adminRouter.delete("/deleteAdmin/:email", isAuthenticatedUser, deleteAdmin);
+adminRouter.delete("/deleteAdmin", isAuthenticatedUser, deleteAdmin);
 
 module.exports = adminRouter;

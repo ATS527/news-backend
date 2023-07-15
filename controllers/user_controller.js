@@ -177,7 +177,7 @@ exports.getUserByEmail = async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: {
-                email: req.params.email,
+                email: req.query.email,
             },
         });
 
@@ -242,7 +242,7 @@ exports.updateUser = async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: {
-                email: req.params.email,
+                email: req.query.email,
             },
         });
 
@@ -280,7 +280,7 @@ exports.deleteUser = async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
-                email: req.params.email,
+                email: req.query.email,
             },
         });
 
