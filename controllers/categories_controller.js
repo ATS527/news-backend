@@ -4,12 +4,12 @@ exports.createCategory = async (req, res) => {
     try {
         const categories = req.body.categories;
         var result = {}
-        const email = req.body.email;
+        const user_id = req.body.user_id;
         if (categories.length > 0) {
             for (let i = 0; i < categories.length; i++) {
                 const category = await Categories.findOne({
                     where: {
-                        email: email,
+                        user_id: user_id,
                         category: categories[i],
                     },
                 });
@@ -23,7 +23,7 @@ exports.createCategory = async (req, res) => {
                 } else {
                     for (let i = 0; i < categories.length; i++) {
                         result = await Categories.create({
-                            email: email,
+                            user_id: user_id,
                             category: categories[i],
                         });
                     }
@@ -52,11 +52,11 @@ exports.createCategory = async (req, res) => {
     }
 }
 
-exports.getCategoryByEmailApi = async (req, res) => {
+exports.getCategoryByUserId = async (req, res) => {
     try {
         const categories = await Categories.findAll({
             where: {
-                email: req.query.email,
+                user_id: req.query.user_id,
             },
         });
 
@@ -77,7 +77,7 @@ exports.getCategoryByEmailApi = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Categories found",
-            email: req.query.email,
+            user_id: req.query.user_id,
             data: result,
         });
 
@@ -106,7 +106,7 @@ exports.deleteCategory = async (req, res) => {
         for (let i = 0; i < categories.length; i++) {
             const result = await Categories.destroy({
                 where: {
-                    email: req.query.email,
+                    user_id: req.query.user_id,
                     category: categories[i],
                 },
             });
@@ -115,7 +115,7 @@ exports.deleteCategory = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Categories deleted",
-            email: req.query.email,
+            user_id: req.query.user_id,
         });
 
     } catch (err) {

@@ -429,13 +429,13 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
 
         const newsViewed = await NewsViewed.findAll({
             where: {
-                email: req.query.email,
+                user_id: req.query.user_id,
             }
         });
 
         const categories = await Category.findAll({
             where: {
-                email: req.query.email,
+                user_id: req.query.user_id,
             }
         });
 
@@ -533,7 +533,7 @@ exports.getNewsWithAdvertisementAndCategorization = async (req, res) => {
 exports.viewedNews = async (req, res) => {
     try {
         const news_id = req.query.news_id;
-        const email = req.query.email;
+        const user_id = req.query.user_id;
 
         const news = await News.findByPk(news_id);
 
@@ -546,7 +546,7 @@ exports.viewedNews = async (req, res) => {
         }
 
         await NewsViewed.create({
-            email: email,
+            user_id: user_id,
             news_id: news_id,
         });
 

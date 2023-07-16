@@ -5,7 +5,7 @@ exports.createBookmark = async (req, res) => {
     try {
         const bookmark = await Bookmark.findOne({
             where: {
-                email: req.body.email,
+                user_id: req.body.user_id,
                 news_id: req.body.news_id
             }
         });
@@ -19,7 +19,7 @@ exports.createBookmark = async (req, res) => {
         }
 
         const result = await Bookmark.create({
-            email: req.body.email,
+            user_id: req.body.user_id,
             news_id: req.body.news_id
         });
 
@@ -43,7 +43,7 @@ exports.deleteBookmark = async (req, res) => {
     try {
         const bookmark = await Bookmark.findOne({
             where: {
-                email: req.body.email,
+                user_id: req.body.user_id,
                 news_id: req.body.news_id
             }
         });
@@ -73,14 +73,14 @@ exports.deleteBookmark = async (req, res) => {
     }
 }
 
-exports.getBookmarkedNewsByEmail = async (req, res) => {
+exports.getBookmarkedNewsByUserId = async (req, res) => {
     try {
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
         const offset = (page - 1) * limit;
         const bookmarks = await Bookmark.findAll({
             where: {
-                email: req.query.email
+                user_id: req.query.user_id
             },
             limit: limit,
             offset: offset,

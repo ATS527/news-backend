@@ -1,10 +1,10 @@
 const userRouter = require('express').Router();
 
-const { createUser,getUsersBySearch,getActivityLogs,loginActivity,logoutActivity, getUserByEmail, updateUser, deleteUser , getAllUserData } = require('../controllers/user_controller');
+const { createUser,getUsersBySearch,getActivityLogs,loginActivity,logoutActivity, getUserById, updateUser, deleteUser , getAllUserData } = require('../controllers/user_controller');
 
 userRouter.post('/createUser', createUser);
 
-userRouter.get('/getUserByEmail', getUserByEmail);
+userRouter.get('/getUserById', getUserById);
 
 userRouter.get('/getUsersBySearch',getUsersBySearch);
 

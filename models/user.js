@@ -22,6 +22,9 @@ const user = sequelize.define("Users", {
     password: {
         type: Sequelize.STRING,
     },
+    phone: {
+        type: Sequelize.BIGINT(10)
+    },
     role: {
         type: Sequelize.STRING,
     }

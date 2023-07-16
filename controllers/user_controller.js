@@ -92,6 +92,7 @@ exports.getActivityLogs = async (req, res) => {
                 var map = {
                     username: user.username,
                     email: user.email,
+                    phone: user.phone,
                     login_time: activity[i].login_time,
                     logout_time: activity[i].logout_time,
                     duration: activity[i].duration
@@ -119,7 +120,7 @@ exports.createUser = async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: {
-                email: req.body.email,
+                [Op.or] : [req.body.phone, req.body.email]
             },
         });
 
@@ -133,6 +134,7 @@ exports.createUser = async (req, res, next) => {
 
         const result = await User.create({
             email: req.body.email,
+            phone: req.body.phone,
             username: req.body.username,
             ip: req.ip,
         });
@@ -173,11 +175,11 @@ exports.getAllUserData = async (req, res, next) => {
     }
 }
 
-exports.getUserByEmail = async (req, res, next) => {
+exports.getUserById = async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: {
-                email: req.query.email,
+                id: req.query.user_id
             },
         });
 
@@ -242,7 +244,7 @@ exports.updateUser = async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: {
-                email: req.query.email,
+                id: req.query.user_id
             },
         });
 
@@ -258,6 +260,7 @@ exports.updateUser = async (req, res, next) => {
             username: req.body.username,
             ip: req.ip,
             email: req.body.email,
+            phone: req.body.phone
         });
 
         res.status(200).json({
@@ -280,7 +283,7 @@ exports.deleteUser = async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
-                email: req.query.email,
+                id: req.query.user_id,
             },
         });
 

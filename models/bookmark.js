@@ -7,8 +7,8 @@ const bookmark = sequelize.define("Bookmarks", {
         autoIncrement: true,
         primaryKey: true,
     },
-    email: {
-        type: Sequelize.STRING,
+    user_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     news_id: {
