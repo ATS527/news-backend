@@ -120,7 +120,7 @@ exports.createUser = async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: {
-                [Op.or] : [req.body.phone, req.body.email]
+                [Op.or]: [{ phone: req.body.phone }, { email: req.body.email }]
             },
         });
 
