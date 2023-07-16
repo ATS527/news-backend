@@ -118,9 +118,11 @@ exports.getActivityLogs = async (req, res) => {
 
 exports.createUser = async (req, res, next) => {
     try {
+        const phone = req.body.phone || 0;
+        const email = req.body.email || "";
         const user = await User.findOne({
             where: {
-                [Op.or]: [{ phone: req.body.phone || 0 }, { email: req.body.email || "" }]
+                [Op.or]: [{ phone: phone }, { email: email }]
             },
         });
 
