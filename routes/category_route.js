@@ -6,6 +6,6 @@ categoryRouter.post('/createCategory', createCategory);
 
 categoryRouter.get('/getCategoryByUserId', getCategoryByUserId);
 
-categoryRouter.delete('/deleteCategory', deleteCategory);
+categoryRouter.post('/deleteCategory', deleteCategory);
 
 module.exports = categoryRouter;

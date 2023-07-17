@@ -6,6 +6,6 @@ bookmarkRouter.post('/createBookmark', createBookmark);
 
 bookmarkRouter.get('/getBookmarkedNewsByUserId', getBookmarkedNewsByUserId);
 
-bookmarkRouter.delete('/deleteBookmark', deleteBookmark);
+bookmarkRouter.post('/deleteBookmark', deleteBookmark);
 
 module.exports = bookmarkRouter;
