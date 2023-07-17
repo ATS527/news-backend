@@ -93,7 +93,7 @@ exports.getCategoryByUserId = async (req, res) => {
 
 exports.deleteCategory = async (req, res) => {
     try {
-        const categories = req.body.categories;
+        const categories = req.query.categories;
 
         if (!categories) {
             res.status(400).json({

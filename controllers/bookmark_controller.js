@@ -43,8 +43,8 @@ exports.deleteBookmark = async (req, res) => {
     try {
         const bookmark = await Bookmark.findOne({
             where: {
-                user_id: req.body.user_id,
-                news_id: req.body.news_id
+                user_id: req.query.user_id,
+                news_id: req.query.news_id
             }
         });
 
