@@ -135,6 +135,7 @@ exports.createUser = async (req, res, next) => {
         }
 
         const result = await User.create({
+            id: req.body.id,
             email: req.body.email,
             phone: req.body.phone,
             username: req.body.username,
