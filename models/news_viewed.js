@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 
 const NewsViewed = sequelize.define("NewsViewed", {
     user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
     },
     news_id: {
         type: Sequelize.INTEGER,

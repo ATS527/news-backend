@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 
 const activity = sequelize.define("Activity", {
     user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
     },
     login_time: {
         type: Sequelize.DATE,

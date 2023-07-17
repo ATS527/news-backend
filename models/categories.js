@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 
 const categories = sequelize.define("Categories", {
     user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
     },
     category: {
