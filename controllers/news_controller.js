@@ -45,11 +45,8 @@ exports.createNews = async (req, res, next) => {
                 notification: {
                     title: "Cyberbul News",
                     body: content,
-                    sound: 'default'
                 }
             }
-
-            console.log('working =======>>');
 
             firebase.messaging().send(message)
                 .then((response) => {
