@@ -49,6 +49,8 @@ exports.createNews = async (req, res, next) => {
                 }
             }
 
+            console.log('working =======>>');
+
             firebase.messaging().send(message)
                 .then((response) => {
                     console.log('Successfully sent message:', response);
