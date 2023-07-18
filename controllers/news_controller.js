@@ -36,15 +36,19 @@ exports.createNews = async (req, res, next) => {
         });
 
         if (result) {
-            const content = req.body.content;
-            const data = req.body.data;
+            const data = {
+                title: req.body.title,
+                category: req.body.category,
+                description: req.body.description,
+                source: req.body.source,
+            };
 
             const message = {
                 data: data,
                 topic: req.body.category,
                 notification: {
                     title: "Cyberbul News",
-                    body: content,
+                    body: req.body.title,
                 }
             }
 
