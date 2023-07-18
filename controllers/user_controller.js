@@ -128,7 +128,7 @@ exports.createUser = async (req, res, next) => {
 
         if (user) {
             res.status(400).json({
-                success: false,
+                success: true,
                 message: "User already exists",
             });
             return;
