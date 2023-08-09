@@ -7,6 +7,8 @@ const { Op } = require("sequelize");
 const Bookmark = require('../models/bookmark');
 const NewsViewed = require('../models/news_viewed');
 const firebase = require("../config/firebase_config");
+const HindiNews = require("../models/hindi_news");
+const translateToHindi = require("../utils/translate");
 
 const server_url = process.env.SERVER_URL || "http://localhost:3000/uploads/";
 
@@ -31,6 +33,8 @@ exports.createNews = async (req, res, next) => {
             category: req.body.category,
             description: req.body.description,
             source: req.body.source,
+            hindi_title: await translateToHindi(req.body.title),
+            hindi_description: await translateToHindi(req.body.description),
             link: req.body.link,
             type: "news"
         });
@@ -55,14 +59,9 @@ exports.createNews = async (req, res, next) => {
             firebase.messaging().send(message)
                 .then((response) => {
                     console.log('Successfully sent message:', response);
-                    // res.status(200).json({ success: true, message: "Push Notification Sent Successfully" });
                 })
                 .catch((error) => {
                     console.log('Error sending message:', error);
-                    // res.status(500).json({
-                    //     success: false,
-                    //     message: "Something went wrong",
-                    // });
                 });
         }
 
@@ -84,7 +83,6 @@ exports.createNews = async (req, res, next) => {
 
 exports.createNewsPicture = async (req, res, next) => {
     try {
-        //upload image in the public uploads folder and provide the string path
         if (!req.files) {
             res.status(400).json({
                 success: false,
@@ -138,7 +136,6 @@ exports.createNewsPicture = async (req, res, next) => {
 
 exports.updateNewsPicture = async (req, res, next) => {
     try {
-        //upload image in the public uploads folder and provide the string path
         if (!req.files) {
             res.status(400).json({
                 success: false,
@@ -172,7 +169,7 @@ exports.updateNewsPicture = async (req, res, next) => {
 
             const strippedFilename = news.image.replace(server_url, "");
 
-            await fs.unlinkSync('./public/uploads/' + strippedFilename);
+            fs.unlinkSync('./public/uploads/' + strippedFilename);
 
             news.image = server_url + filename;
 
@@ -310,6 +307,8 @@ exports.updateNews = async (req, res, next) => {
             title: req.body.title,
             category: req.body.category,
             description: req.body.description,
+            hindi_title: (req.body.title) ? await translateToHindi(title) : undefined,
+            hindi_description: (req.body.description) ? await translateToHindi(description) : undefined,
             source: req.body.source,
             link: req.body.link,
         });

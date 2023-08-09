@@ -14,6 +14,12 @@ const News = sequelize.define("News", {
     description: {
         type: Sequelize.TEXT,
     },
+    hindi_title: {
+        type: Sequelize.STRING,
+    },
+    hindi_description: {
+        type: Sequelize.TEXT,
+    },
     image: {
         type: Sequelize.STRING,
     },
