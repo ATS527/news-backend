@@ -7,7 +7,6 @@ const { Op } = require("sequelize");
 const Bookmark = require('../models/bookmark');
 const NewsViewed = require('../models/news_viewed');
 const firebase = require("../config/firebase_config");
-const HindiNews = require("../models/hindi_news");
 const translateToHindi = require("../utils/translate");
 
 const server_url = process.env.SERVER_URL || "http://localhost:3000/uploads/";
