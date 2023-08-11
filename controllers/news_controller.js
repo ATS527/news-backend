@@ -306,8 +306,8 @@ exports.updateNews = async (req, res, next) => {
             title: req.body.title,
             category: req.body.category,
             description: req.body.description,
-            hindi_title: (req.body.title) ? await translateToHindi(title) : undefined,
-            hindi_description: (req.body.description) ? await translateToHindi(description) : undefined,
+            hindi_title: (req.body.title) ? await translateToHindi(req.body.title) : news.hindi_title,
+            hindi_description: (req.body.description) ? await translateToHindi(req.body.description) : news.hindi_description,
             source: req.body.source,
             link: req.body.link,
         });

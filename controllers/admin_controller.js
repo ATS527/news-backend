@@ -3,6 +3,7 @@ const sendToken = require("../utils/jwtToken")
 const bcrypt = require("bcryptjs");
 
 exports.createAdmin = async (req, res, next) => {
+    const id = req.body.id;
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
@@ -25,6 +26,7 @@ exports.createAdmin = async (req, res, next) => {
 
     await Admin
         .create({
+            id: id,
             username: username,
             email: email,
             password: hashedPassword,

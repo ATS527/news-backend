@@ -1,16 +1,14 @@
-const translate = require('google-translate-api');
+const { translate } = require('@vitalets/google-translate-api');
 
-exports.translateToHindi = async (text) => {
+async function translateToHindi (text) {
 
     if (text === null || text === undefined) {
         return null;
     }
 
-    const result = await translate(text, { to: 'hi' });
-
-    if (!result) {
-        return text;
-    }
+    const result = (await translate(text, { to: 'hi' }));
 
     return result.text;
 }
+
+module.exports = translateToHindi;
