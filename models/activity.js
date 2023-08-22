@@ -13,6 +13,9 @@ const activity = sequelize.define("Activity", {
     },
     duration: {
         type: Sequelize.BIGINT(10),
+    },
+    ip: {
+        type: Sequelize.STRING,
     }
 },
 {

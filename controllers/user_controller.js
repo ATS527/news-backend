@@ -7,6 +7,7 @@ exports.loginActivity = async (req, res) => {
     try {
         const activity = await Activity.create({
             user_id: req.body.user_id,
+            ip: req.ip,
             login_time: Date.now()
         });
 
@@ -84,11 +85,12 @@ exports.getActivityLogs = async (req, res) => {
             ],
         });
 
+
         const data = [];
 
         if (activity.length !== 0) {
             for (var i = 0; i < activity.length; i++) {
-                const user = await User.findByPk(activity[i].user_id);
+                const user = await User.findOne({ where: { id: activity[i].user_id } });
                 if (!user) {
                     res.status(400).json({
                         success: false,
@@ -100,6 +102,7 @@ exports.getActivityLogs = async (req, res) => {
                     username: user.username,
                     email: user.email,
                     phone: user.phone,
+                    ip: activity[i].ip,
                     login_time: activity[i].login_time,
                     logout_time: activity[i].logout_time,
                     duration: activity[i].duration
@@ -304,6 +307,12 @@ exports.deleteUser = async (req, res) => {
             });
             return;
         }
+
+        await Activity.destroy({
+            where: {
+                user_id: req.query.user_id,
+            },
+        });
 
         await user.destroy();
 
