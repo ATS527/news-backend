@@ -89,6 +89,13 @@ exports.getActivityLogs = async (req, res) => {
         if (activity.length !== 0) {
             for (var i = 0; i < activity.length; i++) {
                 const user = await User.findByPk(activity[i].user_id);
+                if (!user) {
+                    res.status(400).json({
+                        success: false,
+                        message: "User not found",
+                    });
+                    return;
+                }
                 var map = {
                     username: user.username,
                     email: user.email,
