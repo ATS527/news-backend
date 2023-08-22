@@ -14,7 +14,7 @@ exports.loginActivity = async (req, res) => {
         });
 
         if (previousActivity) {
-            var duration_in_mins = (Date.now() - activity.login_time) / 60000;
+            var duration_in_mins = (Date.now() - previousActivity.login_time) / 60000;
             previousActivity.logout_time = Date.now();
             previousActivity.duration = duration_in_mins;
             await previousActivity.save();
@@ -30,7 +30,7 @@ exports.loginActivity = async (req, res) => {
                 message: "Previous Activity Logged and new Activity created successfully",
                 data: activity,
             });
-            
+
             return;
         }
 
