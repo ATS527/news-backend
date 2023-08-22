@@ -31,7 +31,6 @@ exports.createAdmin = async (req, res, next) => {
             email: email,
             password: hashedPassword,
             role: role,
-            ip: req.ip,
         })
         .then((result) => {
             sendToken(result, 201, res);

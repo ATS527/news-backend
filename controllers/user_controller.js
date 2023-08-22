@@ -5,9 +5,38 @@ const { Op } = require("sequelize");
 
 exports.loginActivity = async (req, res) => {
     try {
+
+        const previousActivity = await Activity.findOne({
+            where: {
+                user_id: req.body.user_id,
+                logout_time: null
+            },
+        });
+
+        if (previousActivity) {
+            var duration_in_mins = (Date.now() - activity.login_time) / 60000;
+            previousActivity.logout_time = Date.now();
+            previousActivity.duration = duration_in_mins;
+            await previousActivity.save();
+
+            const activity = await Activity.create({
+                user_id: req.body.user_id,
+                ip: req.body.ip,
+                login_time: Date.now()
+            });
+    
+            res.status(201).json({
+                success: true,
+                message: "Previous Activity Logged and new Activity created successfully",
+                data: activity,
+            });
+            
+            return;
+        }
+
         const activity = await Activity.create({
             user_id: req.body.user_id,
-            ip: req.ip,
+            ip: req.body.ip,
             login_time: Date.now()
         });
 
@@ -149,7 +178,6 @@ exports.createUser = async (req, res, next) => {
             email: req.body.email,
             phone: req.body.phone,
             username: req.body.username,
-            ip: req.ip,
         });
 
         res.status(201).json({
@@ -271,7 +299,6 @@ exports.updateUser = async (req, res, next) => {
 
         const result = await user.update({
             username: req.body.username,
-            ip: req.ip,
             email: req.body.email,
             phone: req.body.phone
         });
