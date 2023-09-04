@@ -121,11 +121,7 @@ exports.getActivityLogs = async (req, res) => {
             for (var i = 0; i < activity.length; i++) {
                 const user = await User.findOne({ where: { id: activity[i].user_id } });
                 if (!user) {
-                    res.status(400).json({
-                        success: false,
-                        message: "User not found",
-                    });
-                    return;
+                    continue;
                 }
                 var map = {
                     username: user.username,
